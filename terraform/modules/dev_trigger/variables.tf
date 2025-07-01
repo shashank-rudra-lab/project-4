@@ -24,6 +24,6 @@ variable "cloudbuild_path" {
 
 variable "branch_name" {
   type        = string
-  default     = "main"
+  default     = "master"
   description = "Branch name to trigger builds from"
 }

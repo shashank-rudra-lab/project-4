@@ -1,5 +1,5 @@
 resource "google_cloudbuild_trigger" "dev_trigger" {
-  name     = "${var.app_name}-trigger"
+  name     = "project4-trigger"
   location = "global"
 
   github {

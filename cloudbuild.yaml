@@ -34,7 +34,16 @@ steps:
       - '--file=clouddeploy.yaml'
       - '--region=us-central1'
 
-  # 6. Trigger Cloud Deploy release
+  # 6. List Cloud Deploy targets for verification
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'deploy'
+      - 'targets'
+      - 'list'
+      - '--region=us-central1'
+
+  # 7. Trigger Cloud Deploy release
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:

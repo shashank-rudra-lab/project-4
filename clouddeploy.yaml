@@ -5,17 +5,17 @@ metadata:
 description: Python Flask multi-stage deployment pipeline using Cloud Run
 serialPipeline:
   stages:
-    - targetId: dev
+    - targetId: python-web-flask-pipeline-dev-target
       profiles: ["dev"]
       strategy:
         standard:
           verify: false
-    - targetId: staging
+    - targetId: python-web-flask-pipeline-staging-target
       profiles: ["staging"]
       strategy:
         standard:
           verify: false
-    - targetId: production
+    - targetId: python-web-flask-pipeline-prod-target
       profiles: ["production"]
       strategy:
         standard:

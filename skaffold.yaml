@@ -1,0 +1,25 @@
+apiVersion: skaffold/v4beta6
+kind: Config
+metadata:
+  name: python-web-flask
+build:
+  artifacts:
+    - image: us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev
+      context: .
+      docker:
+        dockerfile: Dockerfile
+   
+deploy:
+  cloudrun:
+    projectId: silent-octagon-460701-a0
+    region: us-central1
+    services:
+      - name: python-web-flask-dev
+        yaml: service-dev.yaml
+        image: us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev
+      - name: python-web-flask-stg
+        yaml: service-stg.yaml
+        image: us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev
+      - name: python-web-flask-prd
+        yaml: service-prd.yaml
+        image: us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev

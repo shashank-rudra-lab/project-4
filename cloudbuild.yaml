@@ -43,7 +43,7 @@ steps:
       - 'list'
       - '--region=us-central1'
 
-  # 7. Trigger Cloud Deploy release
+  # 7. Trigger Cloud Deploy release test
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:

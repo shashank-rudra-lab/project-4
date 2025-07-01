@@ -2,7 +2,8 @@ provider "google" {
   project = "silent-octagon-460701-a0"
   region  = "us-central1"
 }
-  backend "gcs" {
+
+backend "gcs" {
     bucket  = "ncpl-terraform-state1"
     prefix  = "multi-region/state"
   }

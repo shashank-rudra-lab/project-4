@@ -1,12 +1,14 @@
+terraform {
+  backend "gcs" {
+    bucket  = "ncpl-terraform-state1"
+    prefix  = "multi-region/state"
+  }
+}
+
 provider "google" {
   project = "silent-octagon-460701-a0"
   region  = "us-central1"
 }
-
-backend "gcs" {
-    bucket  = "ncpl-terraform-state1"
-    prefix  = "multi-region/state"
-  }
 
 # Artifact Registry to store Docker images
 resource "google_artifact_registry_repository" "devdocker" {

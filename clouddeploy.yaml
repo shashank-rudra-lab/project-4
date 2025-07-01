@@ -17,9 +17,9 @@ serialPipeline:
           verify: false
     - targetId: prd
       profiles: ["production"]
-      requiresApproval: true
       strategy:
         standard:
+          approval: true
           verify: false
 ---
 apiVersion: deploy.cloud.google.com/v1

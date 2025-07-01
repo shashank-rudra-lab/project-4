@@ -20,9 +20,7 @@ serialPipeline:
       strategy:
         standard:
           predeploy:
-            actions:
-              - name: manual-approval
-                approvalRequired: true
+            approval: true
           verify: false
 ---
 apiVersion: deploy.cloud.google.com/v1

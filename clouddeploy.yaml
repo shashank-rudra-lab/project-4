@@ -19,7 +19,6 @@ serialPipeline:
       profiles: ["production"]
       strategy:
         standard:
-          approval: true
           verify: false
 ---
 apiVersion: deploy.cloud.google.com/v1

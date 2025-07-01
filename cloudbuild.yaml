@@ -1,5 +1,17 @@
 steps:
-  # Step 1: Build Docker image into dev
+  # 1. Terraform Init
+  - name: 'hashicorp/terraform:latest'
+    entrypoint: 'terraform'
+    args: ['init']
+    dir: 'terraform'
+
+  # 2. Terraform Apply
+  - name: 'hashicorp/terraform:latest'
+    entrypoint: 'terraform'
+    args: ['apply', '-auto-approve']
+    dir: 'terraform'
+
+  # 3. Build Docker image
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'build'
@@ -7,41 +19,23 @@ steps:
       - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:$BUILD_ID'
       - '.'
 
-  # Step 2: Push Docker image into dev
+  # 4. Push Docker image
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
       - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:$BUILD_ID'
 
-   # Step 3: Build Docker image into stg
-  - name: 'gcr.io/cloud-builders/docker'
+  # 5. Trigger Cloud Deploy release
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
     args:
-      - 'build'
-      - '-t'
-      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-stg/stg:$BUILD_ID'
-      - '.'
+      - 'deploy'
+      - 'releases'
+      - 'create'
+      - 'release-$BUILD_ID'
+      - '--delivery-pipeline=python-web-flask-pipeline'
+      - '--region=us-central1'
+      - '--images=dev=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:$BUILD_ID'
+      - '--source=.'
 
-  # Step 4: Push Docker image into stg 
-  - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'push'
-      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-stg/stg:$BUILD_ID'
-  
-  # Step 5: Build Docker image into prd
-  - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'build'
-      - '-t'
-      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-prd/prd:$BUILD_ID'
-      - '.'         
-  
-  # Step 6: Push Docker image into prd
-  - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'push'
-      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-prd/prd:$BUILD_ID'  
 
-options:
-  logging: CLOUD_LOGGING_ONLY
-
-substitutions: {}

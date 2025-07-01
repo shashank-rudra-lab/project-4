@@ -1,0 +1,22 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: python-web-flask-prd
+  namespace: default
+spec:
+  template:
+    metadata:
+      annotations:
+        run.googleapis.com/client-name: "cloud-deploy"
+    spec:
+      containers:
+        - image: IMAGE_URL # Replaced by Cloud Deploy
+      serviceAccountName: shopshere-product-service@silent-octagon-460701-a0.iam.gserviceaccount.com
+      ports:
+        - containerPort: 8080
+      env:
+        - name: ENV
+          value: "prd"
+  traffic:
+    - latestRevision: true
+      percent: 100

@@ -2,6 +2,10 @@ provider "google" {
   project = "silent-octagon-460701-a0"
   region  = "us-central1"
 }
+  backend "gcs" {
+    bucket  = "ncpl-terraform-state1"
+    prefix  = "multi-region/state"
+  }
 
 # Artifact Registry to store Docker images
 resource "google_artifact_registry_repository" "devdocker" {
@@ -32,5 +36,5 @@ module "dev_trigger" {
   github_owner     = "shashank-rudra-lab"
   github_repo_name = "project-4"
   cloudbuild_path  = "cloudbuild.yaml"
-  branch_name      = "main"
+  branch_name      = "master"
 }

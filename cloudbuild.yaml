@@ -26,7 +26,7 @@ steps:
       - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:$BUILD_ID'
 
   # 5. Substitute $BUILD_ID in service YAMLs
-  - name: 'gcr.io/cloud-builders/gcloud'
+  - name: 'gcr.io/cloud-builders/bash'
     entrypoint: 'bash'
     args:
       - '-c'
@@ -35,7 +35,7 @@ steps:
         sed "s|\\$BUILD_ID|${_BUILD_ID}|g" service-stg.yaml > service-stg-subst.yaml
         sed "s|\\$BUILD_ID|${_BUILD_ID}|g" service-prd.yaml > service-prd-subst.yaml
 
-  # 6. Trigger Cloud Deploy release (dev only)
+  # 6. Trigger Cloud Deploy release
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     args:
       - 'deploy'

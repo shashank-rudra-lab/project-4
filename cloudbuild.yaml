@@ -24,8 +24,18 @@ steps:
     args:
       - 'push'
       - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:$BUILD_ID'
+  
+  # 5. Cloud Deploy apply
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      [
+        'deploy', 'apply',
+        '--file=clouddeploy.yaml',
+        '--region=us-central1'
+      ]
 
-  # 5. Substitute $BUILD_ID in service YAMLs using Ubuntu (which has sed + bash)
+  # 6. Substitute $BUILD_ID in service YAMLs using Ubuntu (which has sed + bash)
   - name: 'ubuntu'
     entrypoint: 'bash'
     args:
@@ -37,7 +47,7 @@ steps:
         sed "s|\\\$BUILD_ID|${_BUILD_ID}|g" service-prd.yaml > service-prd-subst.yaml
 
 
-  # 6. Trigger Cloud Deploy release (dev only)
+  # 7. Trigger Cloud Deploy release (dev only)
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     args:
       - 'deploy'

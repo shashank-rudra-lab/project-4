@@ -5,14 +5,17 @@ metadata:
 serialPipeline:
   stages:
     - targetId: dev
+      requireApproval: false
       strategy:
         standard:
           verify: false
     - targetId: stg
+      requireApproval: false
       strategy:
         standard:
           verify: false
     - targetId: prd
+      requireApproval: true
       strategy:
         standard:
           verify: false

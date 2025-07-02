@@ -11,29 +11,26 @@ build:
 
 deploy:
   cloudrun:
-    project: silent-octagon-460701-a0
     region: us-central1
-    services:
-      - name: python-web-flask-dev
-        yaml: service-dev.yaml
-        image: us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev
+    serviceName: python-web-flask-dev
+    manifest:
+      rawYaml:
+        - service-dev.yaml
 
 profiles:
   - name: stg
     deploy:
       cloudrun:
-        project: silent-octagon-460701-a0
         region: us-central1
-        services:
-          - name: python-web-flask-stg
-            yaml: service-stg.yaml
-            image: us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev
+        serviceName: python-web-flask-stg
+        manifest:
+          rawYaml:
+            - service-stg.yaml
   - name: prd
     deploy:
       cloudrun:
-        project: silent-octagon-460701-a0
         region: us-central1
-        services:
-          - name: python-web-flask-prd
-            yaml: service-prd.yaml
-            image: us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev
+        serviceName: python-web-flask-prd
+        manifest:
+          rawYaml:
+            - service-prd.yaml

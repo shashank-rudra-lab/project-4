@@ -1,5 +1,5 @@
 steps:
-  # 1. Terraform Init (if you use Terraform)
+  # 1. Terraform Init
   - name: 'hashicorp/terraform:latest'
     entrypoint: 'terraform'
     args: ['init']
@@ -25,53 +25,18 @@ steps:
       - 'push'
       - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:$BUILD_ID'
 
-  # 5. Deploy placeholder Cloud Run services if they do not exist
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: gcloud
-    args:
-      - 'run'
-      - 'deploy'
-      - 'python-web-flask-dev'
-      - '--image=gcr.io/cloudrun/hello'
-      - '--region=us-central1'
-      - '--platform=managed'
-      - '--allow-unauthenticated'
-
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: gcloud
-    args:
-      - 'run'
-      - 'deploy'
-      - 'python-web-flask-stg'
-      - '--image=gcr.io/cloudrun/hello'
-      - '--region=us-central1'
-      - '--platform=managed'
-      - '--allow-unauthenticated'
-
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: gcloud
-    args:
-      - 'run'
-      - 'deploy'
-      - 'python-web-flask-prd'
-      - '--image=gcr.io/cloudrun/hello'
-      - '--region=us-central1'
-      - '--platform=managed'
-      - '--allow-unauthenticated'
-
-  # 4.5. Substitute $BUILD_ID in service YAMLs
+  # 5. Substitute $BUILD_ID in service YAMLs
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        sed "s/\\$BUILD_ID/$BUILD_ID/g" service-dev.yaml > service-dev-subst.yaml
-        sed "s/\\$BUILD_ID/$BUILD_ID/g" service-stg.yaml > service-stg-subst.yaml
-        sed "s/\\$BUILD_ID/$BUILD_ID/g" service-prd.yaml > service-prd-subst.yaml
+        sed 's|\$BUILD_ID|'"$BUILD_ID"'|g' service-dev.yaml > service-dev-subst.yaml
+        sed 's|\$BUILD_ID|'"$BUILD_ID"'|g' service-stg.yaml > service-stg-subst.yaml
+        sed 's|\$BUILD_ID|'"$BUILD_ID"'|g' service-prd.yaml > service-prd-subst.yaml
 
   # 6. Apply Cloud Deploy pipeline and targets
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: gcloud
     args:
       - 'deploy'
       - 'apply'
@@ -80,7 +45,6 @@ steps:
 
   # 7. List Cloud Deploy targets for verification
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: gcloud
     args:
       - 'deploy'
       - 'targets'
@@ -89,7 +53,6 @@ steps:
 
   # 8. Trigger Cloud Deploy release (dev only)
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: gcloud
     args:
       - 'deploy'
       - 'releases'
@@ -99,6 +62,7 @@ steps:
       - '--region=us-central1'
       - '--images=dev=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:$BUILD_ID'
       - '--from-run-manifest=service-dev-subst.yaml'
+      - '--description=automated release'
 
 options:
   logging: CLOUD_LOGGING_ONLY

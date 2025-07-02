@@ -11,7 +11,7 @@ spec:
         deploy.cloud.google.com/target: "stg"
     spec:
       containers:
-        - image: us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-stg/stg:latest
+        - image: stg
       serviceAccountName: shopshere-product-service@silent-octagon-460701-a0.iam.gserviceaccount.com
       ports:
         - containerPort: 8080

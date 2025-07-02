@@ -83,6 +83,30 @@ steps:
       - '--from-run-manifest=service-prd.yaml'
       - '--description=automated release'
 
+  # 7. Promote release to staging
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'deploy'
+      - 'releases'
+      - 'promote'
+      - 'release-${_BUILD_ID}'
+      - '--delivery-pipeline=flask-pipeline'
+      - '--region=us-central1'
+      - '--to-target=stg'
+
+  # 8. Promote release to production
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'deploy'
+      - 'releases'
+      - 'promote'
+      - 'release-${_BUILD_ID}'
+      - '--delivery-pipeline=flask-pipeline'
+      - '--region=us-central1'
+      - '--to-target=prd'
+
 options:
   logging: CLOUD_LOGGING_ONLY
 

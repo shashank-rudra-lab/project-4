@@ -8,6 +8,7 @@ spec:
     metadata:
       annotations:
         run.googleapis.com/client-name: "cloud-deploy"
+        deploy.cloud.google.com/target: "prd"
     spec:
       containers:
         - image: us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-prd/prd:latest

@@ -18,9 +18,15 @@ steps:
       - '-t'
       - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:${_BUILD_ID}'
       - '-t'
+      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:latest'
+      - '-t'
       - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-stg/stg:${_BUILD_ID}'
       - '-t'
+      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-stg/stg:latest'
+      - '-t'
       - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-prd/prd:${_BUILD_ID}'
+      - '-t'
+      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-prd/prd:latest'
       - '.'
 
   # 4. Push Docker images
@@ -31,11 +37,23 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
+      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:latest'
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
       - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-stg/stg:${_BUILD_ID}'
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
+      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-stg/stg:latest'
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
       - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-prd/prd:${_BUILD_ID}'
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-prd/prd:latest'
   
   # 5. Cloud Deploy apply
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -47,18 +65,7 @@ steps:
         '--region=us-central1'
       ]
 
-  # 6. Substitute $BUILD_ID in service YAMLs
-  - name: 'ubuntu'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        sed "s|\\\$BUILD_ID|${_BUILD_ID}|g" service-dev.yaml > service-dev-subst.yaml
-        sed "s|\\\$BUILD_ID|${_BUILD_ID}|g" service-stg.yaml > service-stg-subst.yaml
-        sed "s|\\\$BUILD_ID|${_BUILD_ID}|g" service-prd.yaml > service-prd-subst.yaml
-
-
-  # 7. Trigger Cloud Deploy release for all stages
+  # 6. Trigger Cloud Deploy release for all stages
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
@@ -71,9 +78,9 @@ steps:
       - '--images=dev=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:${_BUILD_ID}'
       - '--images=stg=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-stg/stg:${_BUILD_ID}'
       - '--images=prd=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-prd/prd:${_BUILD_ID}'
-      - '--from-run-manifest=service-dev-subst.yaml'
-      - '--from-run-manifest=service-stg-subst.yaml'
-      - '--from-run-manifest=service-prd-subst.yaml'
+      - '--from-run-manifest=service-dev.yaml'
+      - '--from-run-manifest=service-stg.yaml'
+      - '--from-run-manifest=service-prd.yaml'
       - '--description=automated release'
 
 options:

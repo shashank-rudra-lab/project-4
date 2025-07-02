@@ -14,4 +14,4 @@ kind: Target
 metadata:
   name: dev
 run:
-  location: us-central1
+  location: projects/silent-octagon-460701-a0/locations/us-central1

@@ -32,9 +32,10 @@ steps:
       - '-c'
       - |
         apt-get update && apt-get install -y sed && \
-        sed "s|\\$BUILD_ID|${_BUILD_ID}|g" service-dev.yaml > service-dev-subst.yaml && \
-        sed "s|\\$BUILD_ID|${_BUILD_ID}|g" service-stg.yaml > service-stg-subst.yaml && \
-        sed "s|\\$BUILD_ID|${_BUILD_ID}|g" service-prd.yaml > service-prd-subst.yaml
+        sed "s|\\\$BUILD_ID|${_BUILD_ID}|g" service-dev.yaml > service-dev-subst.yaml && \
+        sed "s|\\\$BUILD_ID|${_BUILD_ID}|g" service-stg.yaml > service-stg-subst.yaml && \
+        sed "s|\\\$BUILD_ID|${_BUILD_ID}|g" service-prd.yaml > service-prd-subst.yaml
+
 
   # 6. Trigger Cloud Deploy release (dev only)
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'

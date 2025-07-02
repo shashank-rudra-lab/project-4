@@ -1,5 +1,5 @@
 steps:
-  # 1. Terraform Init (if you use Terraform infra)
+  # 1. Terraform Init (if you use Terraform)
   - name: 'hashicorp/terraform:latest'
     entrypoint: 'terraform'
     args: ['init']
@@ -59,6 +59,16 @@ steps:
       - '--platform=managed'
       - '--allow-unauthenticated'
 
+  # 4.5. Substitute $BUILD_ID in service YAMLs
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        sed "s/\\$BUILD_ID/$BUILD_ID/g" service-dev.yaml > service-dev-subst.yaml
+        sed "s/\\$BUILD_ID/$BUILD_ID/g" service-stg.yaml > service-stg-subst.yaml
+        sed "s/\\$BUILD_ID/$BUILD_ID/g" service-prd.yaml > service-prd-subst.yaml
+
   # 6. Apply Cloud Deploy pipeline and targets
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
@@ -88,7 +98,7 @@ steps:
       - '--delivery-pipeline=flask-pipeline'
       - '--region=us-central1'
       - '--images=dev=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:$BUILD_ID'
-      - '--from-run-manifest=service-dev.yaml'
+      - '--from-run-manifest=service-dev-subst.yaml'
 
 options:
   logging: CLOUD_LOGGING_ONLY

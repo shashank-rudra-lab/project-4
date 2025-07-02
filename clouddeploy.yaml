@@ -5,17 +5,17 @@ metadata:
 description: Python Flask multi-stage deployment pipeline using Cloud Run
 serialPipeline:
   stages:
-    - targetId: python-web-flask-dev
+    - targetId: dev
       profiles: ["dev"]
       strategy:
         standard:
           verify: false
-    - targetId: python-web-flask-stg
+    - targetId: stg
       profiles: ["staging"]
       strategy:
         standard:
           verify: false
-    - targetId: python-web-flask-prd
+    - targetId: prd
       profiles: ["production"]
       strategy:
         standard:
@@ -24,7 +24,7 @@ serialPipeline:
 apiVersion: deploy.cloud.google.com/v1
 kind: Target
 metadata:
-  name: python-web-flask-dev
+  name: dev
 description: Development environment in Cloud Run
 run:
   location: us-central1
@@ -32,7 +32,7 @@ run:
 apiVersion: deploy.cloud.google.com/v1
 kind: Target
 metadata:
-  name: python-web-flask-stg
+  name: stg
 description: Staging environment in Cloud Run
 run:
   location: us-central1
@@ -40,7 +40,7 @@ run:
 apiVersion: deploy.cloud.google.com/v1
 kind: Target
 metadata:
-  name: python-web-flask-prd
+  name: prd
 description: Production environment in Cloud Run
 run:
   location: us-central1

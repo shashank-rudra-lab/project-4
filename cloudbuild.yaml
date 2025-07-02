@@ -29,45 +29,44 @@ steps:
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
-      [
-        'run', 'deploy', 'python-web-flask-dev',
-        '--image=gcr.io/cloudrun/hello',
-        '--region=us-central1',
-        '--platform=managed',
-        '--allow-unauthenticated'
-      ]
+      - 'run'
+      - 'deploy'
+      - 'python-web-flask-dev'
+      - '--image=gcr.io/cloudrun/hello'
+      - '--region=us-central1'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
-      [
-        'run', 'deploy', 'python-web-flask-stg',
-        '--image=gcr.io/cloudrun/hello',
-        '--region=us-central1',
-        '--platform=managed',
-        '--allow-unauthenticated'
-      ]
+      - 'run'
+      - 'deploy'
+      - 'python-web-flask-stg'
+      - '--image=gcr.io/cloudrun/hello'
+      - '--region=us-central1'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
-      [
-        'run', 'deploy', 'python-web-flask-prd',
-        '--image=gcr.io/cloudrun/hello',
-        '--region=us-central1',
-        '--platform=managed',
-        '--allow-unauthenticated'
-      ]
+      - 'run'
+      - 'deploy'
+      - 'python-web-flask-prd'
+      - '--image=gcr.io/cloudrun/hello'
+      - '--region=us-central1'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
 
   # 6. Apply Cloud Deploy pipeline and targets
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
-      [
-        'deploy', 'apply',
-        '--file=clouddeploy.yaml',
-        '--region=us-central1'
-      ]
+      - 'deploy'
+      - 'apply'
+      - '--file=clouddeploy.yaml'
+      - '--region=us-central1'
 
   # 7. List Cloud Deploy targets for verification
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -81,15 +80,16 @@ steps:
   # 8. Trigger Cloud Deploy release (dev only)
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
-      args:
-      [
-        'deploy', 'releases', 'create', 'release-$BUILD_ID',
-        '--delivery-pipeline=flask-pipeline',
-        '--region=us-central1',
-        '--images=dev=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:$BUILD_ID',
-        '--from-k8s-manifest=service-dev.yaml',
-        '--render-service-manifests'
-      ]
+    args:
+      - 'deploy'
+      - 'releases'
+      - 'create'
+      - 'release-$BUILD_ID'
+      - '--delivery-pipeline=flask-pipeline'
+      - '--region=us-central1'
+      - '--images=dev=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:$BUILD_ID'
+      - '--from-k8s-manifest=service-dev.yaml'
+      - '--render-service-manifests'
 
 options:
   logging: CLOUD_LOGGING_ONLY

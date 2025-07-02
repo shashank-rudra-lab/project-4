@@ -25,31 +25,31 @@ steps:
       - 'push'
       - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:$BUILD_ID'
 
-  # 5. Substitute $BUILD_ID in service YAMLs
-  - name: 'gcr.io/cloud-builders/gcloud'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        sed 's|\$BUILD_ID|'"$BUILD_ID"'|g' service-dev.yaml > service-dev-subst.yaml
-        sed 's|\$BUILD_ID|'"$BUILD_ID"'|g' service-stg.yaml > service-stg-subst.yaml
-        sed 's|\$BUILD_ID|'"$BUILD_ID"'|g' service-prd.yaml > service-prd-subst.yaml
+  # # 5. Substitute $BUILD_ID in service YAMLs
+  # - name: 'gcr.io/cloud-builders/gcloud'
+  #   entrypoint: 'bash'
+  #   args:
+  #     - '-c'
+  #     - |
+  #       sed 's|\$BUILD_ID|'"$BUILD_ID"'|g' service-dev.yaml > service-dev-subst.yaml
+  #       sed 's|\$BUILD_ID|'"$BUILD_ID"'|g' service-stg.yaml > service-stg-subst.yaml
+  #       sed 's|\$BUILD_ID|'"$BUILD_ID"'|g' service-prd.yaml > service-prd-subst.yaml
 
-  # 6. Apply Cloud Deploy pipeline and targets
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    args:
-      - 'deploy'
-      - 'apply'
-      - '--file=clouddeploy.yaml'
-      - '--region=us-central1'
+  # # 6. Apply Cloud Deploy pipeline and targets
+  # - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  #   args:
+  #     - 'deploy'
+  #     - 'apply'
+  #     - '--file=clouddeploy.yaml'
+  #     - '--region=us-central1'
 
-  # 7. List Cloud Deploy targets for verification
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    args:
-      - 'deploy'
-      - 'targets'
-      - 'list'
-      - '--region=us-central1'
+  # # 7. List Cloud Deploy targets for verification
+  # - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  #   args:
+  #     - 'deploy'
+  #     - 'targets'
+  #     - 'list'
+  #     - '--region=us-central1'
 
   # 8. Trigger Cloud Deploy release (dev only)
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'

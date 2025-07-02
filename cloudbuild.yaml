@@ -16,14 +16,14 @@ steps:
     args:
       - 'build'
       - '-t'
-      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/python-web-flask-dev:$BUILD_ID'
+      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/python-web-flask-dev:latest'
       - '.'
 
   # 4. Push Docker image
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
-      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/python-web-flask-dev:$BUILD_ID'
+      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/python-web-flask-dev:latest'
 
   # 5. Deploy placeholder Cloud Run services if they do not exist
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -87,7 +87,7 @@ steps:
       - 'release-$BUILD_ID'
       - '--delivery-pipeline=flask-pipeline'
       - '--region=us-central1'
-      - '--images=dev=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:$BUILD_ID'
+      - '--images=dev=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:latest'
       - '--from-run-manifest=service-dev.yaml'
 
 options:

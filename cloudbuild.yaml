@@ -11,19 +11,31 @@ steps:
     args: ['apply', '-auto-approve']
     dir: 'terraform'
 
-  # 3. Build Docker image
+  # 3. Build Docker image with tags for all environments
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'build'
       - '-t'
       - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:${_BUILD_ID}'
+      - '-t'
+      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-stg/stg:${_BUILD_ID}'
+      - '-t'
+      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-prd/prd:${_BUILD_ID}'
       - '.'
 
-  # 4. Push Docker image
+  # 4. Push Docker images
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
       - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:${_BUILD_ID}'
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-stg/stg:${_BUILD_ID}'
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-prd/prd:${_BUILD_ID}'
   
   # 5. Cloud Deploy apply
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -35,20 +47,20 @@ steps:
         '--region=us-central1'
       ]
 
-  # 6. Substitute $BUILD_ID in service YAMLs using Ubuntu (which has sed + bash)
+  # 6. Substitute $BUILD_ID in service YAMLs
   - name: 'ubuntu'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        apt-get update && apt-get install -y sed && \
-        sed "s|\\\$BUILD_ID|${_BUILD_ID}|g" service-dev.yaml > service-dev-subst.yaml && \
-        sed "s|\\\$BUILD_ID|${_BUILD_ID}|g" service-stg.yaml > service-stg-subst.yaml && \
+        sed "s|\\\$BUILD_ID|${_BUILD_ID}|g" service-dev.yaml > service-dev-subst.yaml
+        sed "s|\\\$BUILD_ID|${_BUILD_ID}|g" service-stg.yaml > service-stg-subst.yaml
         sed "s|\\\$BUILD_ID|${_BUILD_ID}|g" service-prd.yaml > service-prd-subst.yaml
 
 
-  # 7. Trigger Cloud Deploy release (dev only)
+  # 7. Trigger Cloud Deploy release for all stages
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
     args:
       - 'deploy'
       - 'releases'
@@ -57,7 +69,11 @@ steps:
       - '--delivery-pipeline=flask-pipeline'
       - '--region=us-central1'
       - '--images=dev=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:${_BUILD_ID}'
+      - '--images=stg=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-stg/stg:${_BUILD_ID}'
+      - '--images=prd=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-prd/prd:${_BUILD_ID}'
       - '--from-run-manifest=service-dev-subst.yaml'
+      - '--from-run-manifest=service-stg-subst.yaml'
+      - '--from-run-manifest=service-prd-subst.yaml'
       - '--description=automated release'
 
 options:

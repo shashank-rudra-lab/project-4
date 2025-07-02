@@ -1,5 +1,5 @@
 steps:
-  # 1. Terraform Init
+  # 1. Terraform Init (if you use Terraform infra)
   - name: 'hashicorp/terraform:latest'
     entrypoint: 'terraform'
     args: ['init']
@@ -25,35 +25,70 @@ steps:
       - 'push'
       - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/python-web-flask-dev:$BUILD_ID'
 
-  # 5. Apply Cloud Deploy pipeline and targets
+  # 5. Deploy placeholder Cloud Run services if they do not exist
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
-      - 'deploy'
-      - 'apply'
-      - '--file=clouddeploy.yaml'
-      - '--region=us-central1'
+      [
+        'run', 'deploy', 'python-web-flask-dev',
+        '--image=gcr.io/cloudrun/hello',
+        '--region=us-central1',
+        '--platform=managed',
+        '--allow-unauthenticated'
+      ]
 
-  # 6. List Cloud Deploy targets for verification
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
-      - 'deploy'
-      - 'targets'
-      - 'list'
-      - '--region=us-central1'
+      [
+        'run', 'deploy', 'python-web-flask-stg',
+        '--image=gcr.io/cloudrun/hello',
+        '--region=us-central1',
+        '--platform=managed',
+        '--allow-unauthenticated'
+      ]
 
-  # 7. Trigger Cloud Deploy release
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
-      - 'deploy'
-      - 'releases'
-      - 'create'
-      - 'release-$BUILD_ID'
-      - '--delivery-pipeline=flask-pipeline'
-      - '--region=us-central1'
-      - '--images=python-web-flask-dev=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/python-web-flask-dev:$BUILD_ID'
-      - '--source=.'
+      [
+        'run', 'deploy', 'python-web-flask-prd',
+        '--image=gcr.io/cloudrun/hello',
+        '--region=us-central1',
+        '--platform=managed',
+        '--allow-unauthenticated'
+      ]
+
+  # 6. Apply Cloud Deploy pipeline and targets
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      [
+        'deploy', 'apply',
+        '--file=clouddeploy.yaml',
+        '--region=us-central1'
+      ]
+
+  # 7. List Cloud Deploy targets for verification
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      [
+        'deploy', 'targets', 'list',
+        '--region=us-central1'
+      ]
+
+  # 8. Trigger Cloud Deploy release
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      [
+        'deploy', 'releases', 'create', 'release-$BUILD_ID',
+        '--delivery-pipeline=flask-pipeline',
+        '--region=us-central1',
+        '--images=python-web-flask-dev=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/python-web-flask-dev:$BUILD_ID',
+        '--source=.'
+      ]
+
 options:
   logging: CLOUD_LOGGING_ONLY

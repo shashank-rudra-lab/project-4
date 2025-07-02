@@ -10,7 +10,7 @@ spec:
         run.googleapis.com/client-name: "cloud-deploy"
     spec:
       containers:
-        - image: IMAGE_URL # Replaced by Cloud Deploy
+        - image: us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/python-web-flask-dev:$BUILD_ID
       serviceAccountName: shopshere-product-service@silent-octagon-460701-a0.iam.gserviceaccount.com
       ports:
         - containerPort: 8080

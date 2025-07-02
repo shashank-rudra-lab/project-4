@@ -73,22 +73,23 @@ steps:
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
-      [
-        'deploy', 'targets', 'list',
-        '--region=us-central1'
-      ]
+      - 'deploy'
+      - 'targets'
+      - 'list'
+      - '--region=us-central1'
 
-  # 8. Trigger Cloud Deploy release
+  # 8. Trigger Cloud Deploy release (dev only)
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
-      [
-        'deploy', 'releases', 'create', 'release-$BUILD_ID',
-        '--delivery-pipeline=flask-pipeline',
-        '--region=us-central1',
-        '--images=python-web-flask-dev=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/python-web-flask-dev:$BUILD_ID',
-        '--source=.'
-      ]
+      - 'deploy'
+      - 'releases'
+      - 'create'
+      - 'release-$BUILD_ID'
+      - '--delivery-pipeline=flask-pipeline'
+      - '--region=us-central1'
+      - '--images=dev=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:$BUILD_ID'
+      - '--source=.'
 
 options:
   logging: CLOUD_LOGGING_ONLY

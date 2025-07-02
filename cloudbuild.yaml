@@ -88,7 +88,7 @@ steps:
       - 'release-$BUILD_ID'
       - '--delivery-pipeline=flask-pipeline'
       - '--region=us-central1'
-      - '--images=dev=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:$BUILD_ID'
+      - '--images=IMAGE_URL=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/python-web-flask-dev:$BUILD_ID'
       - '--source=.'
 
 options:

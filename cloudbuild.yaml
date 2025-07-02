@@ -88,8 +88,7 @@ steps:
       - '--delivery-pipeline=flask-pipeline'
       - '--region=us-central1'
       - '--images=dev=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:$BUILD_ID'
-      - '--from-k8s-manifest=service-dev.yaml'
-      - '--render-service-manifests'
+      - '--from-run-manifest=service-dev.yaml'
 
 options:
   logging: CLOUD_LOGGING_ONLY

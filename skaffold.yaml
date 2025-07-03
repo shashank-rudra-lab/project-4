@@ -2,16 +2,22 @@ apiVersion: skaffold/v4beta9
 kind: Config
 profiles:
 - name: dev
+  deploy:
+    cloudrun: {}  # Explicit Cloud Run deployment
   manifests:
     rawYaml:
       - cloudrun/dev.yaml
       
 - name: stg
+  deploy:
+    cloudrun: {}
   manifests:
     rawYaml:
       - cloudrun/stg.yaml
       
 - name: prd
+  deploy:
+    cloudrun: {}
   manifests:
     rawYaml:
       - cloudrun/prd.yaml

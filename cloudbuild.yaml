@@ -16,7 +16,7 @@ steps:
         "build",
         "-t",
         "us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:${_BUILD_ID}",
-        "."
+        ".",
       ]
 
   - name: "gcr.io/cloud-builders/docker"
@@ -31,17 +31,31 @@ steps:
     entrypoint: gcloud
     args: ["deploy", "apply", "--file=clouddeploy.yaml", "--region=us-central1"]
 
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: bash
+    args:
+      - "-c"
+      - |
+        echo "===== Skaffold Version ====="
+        skaffold version
+        echo "===== Cloud Run Services ====="
+        gcloud run services list --region=us-central1
+        echo "===== Cloud Deploy Targets ====="
+        gcloud deploy targets list --region=us-central1
+
   # Create release
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: gcloud
     args:
       [
-        "deploy", "releases", "create",
+        "deploy",
+        "releases",
+        "create",
         "release-${_BUILD_ID}",
         "--delivery-pipeline=flask-pipeline",
         "--region=us-central1",
         "--images=IMAGE=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:${_BUILD_ID}",
-        "--skaffold-file=skaffold.yaml"
+        "--skaffold-file=skaffold.yaml",
       ]
 
 options:

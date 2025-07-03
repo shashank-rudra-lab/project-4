@@ -79,6 +79,33 @@ steps:
       ]
 
 
+  # 7. Create stg release with stg manifest
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      [
+        'deploy', 'releases', 'create',
+        'release-stg-${_BUILD_ID}',
+        '--delivery-pipeline=flask-pipeline',
+        '--region=us-central1',
+        '--from-run-manifest=cloudrun-stg.yaml',
+        '--description=automated dev release'
+      ]
+    
+  # 8. Create prd release with prd manifest
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      [
+        'deploy', 'releases', 'create',
+        'release-prd-${_BUILD_ID}',
+        '--delivery-pipeline=flask-pipeline',
+        '--region=us-central1',
+        '--from-run-manifest=cloudrun-prd.yaml',
+        '--description=automated dev release'
+      ]
+  
+
 options:
   logging: CLOUD_LOGGING_ONLY
 

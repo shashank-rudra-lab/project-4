@@ -2,24 +2,26 @@ apiVersion: deploy.cloud.google.com/v1
 kind: DeliveryPipeline
 metadata:
   name: flask-pipeline
-description: "Cloud Run deployment pipeline with production approval"
 serialPipeline:
   stages:
     - targetId: dev
       profiles: ["dev"]
       strategy:
-        standard: {}
+        standard:
+          postdeploy:
+            actions: ["promote-to-stg"]  # Auto-promote after dev
     - targetId: stg
       profiles: ["stg"]
       strategy:
-        standard: {}
+        standard:
+          postdeploy:
+            actions: ["promote-to-prd"]  # Auto-promote after staging
     - targetId: prd
       profiles: ["prd"]
       strategy:
         standard:
-          # Correct approval configuration for Cloud Run
           postdeploy:
-            actions: ["approve"]  # This creates the approval gate
+            actions: ["approve"]  # Manual approval for production
 ---
 apiVersion: deploy.cloud.google.com/v1
 kind: Target

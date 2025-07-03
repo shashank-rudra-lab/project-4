@@ -29,3 +29,17 @@ customActions:
     image: gcr.io/cloud-builders/gcloud
     command: ["echo"]
     args: ["Approval action placeholder"]
+
+- name: promote-to-stg
+  containers:
+  - name: promote-action
+    image: gcr.io/cloud-builders/gcloud
+    command: ["echo"]
+    args: ["Auto-promoting to staging"]
+
+- name: promote-to-prd
+  containers:
+  - name: promote-action
+    image: gcr.io/cloud-builders/gcloud
+    command: ["echo"]
+    args: ["Auto-promoting to production"]

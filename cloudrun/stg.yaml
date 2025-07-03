@@ -12,7 +12,7 @@ spec:
         run.googleapis.com/revision-suffix: "${CD_RELEASE_UID}-stg"
     spec:
       containers:
-        - image: "us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:${CD_IMAGE_TAG}"
+        - image: "${IMAGE}"  # Use IMAGE variable directly
           env:
             - name: ENV
               value: "stg"

@@ -1,22 +1,23 @@
 steps:
-  # Terraform steps remain unchanged
+  # Terraform steps
   - name: "hashicorp/terraform:latest"
     entrypoint: "terraform"
     args: ["init"]
     dir: "terraform"
+    
   - name: "hashicorp/terraform:latest"
     entrypoint: "terraform"
     args: ["apply", "-auto-approve"]
     dir: "terraform"
 
-  # Build and push
+  # Build and push single image
   - name: "gcr.io/cloud-builders/docker"
     args:
       [
         "build",
         "-t",
         "us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:${_BUILD_ID}",
-        ".",
+        "."
       ]
 
   - name: "gcr.io/cloud-builders/docker"
@@ -31,26 +32,12 @@ steps:
     entrypoint: gcloud
     args: ["deploy", "apply", "--file=clouddeploy.yaml", "--region=us-central1"]
 
-  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
-    entrypoint: bash
-    args:
-      - "-c"
-      - |
-        echo "===== Skaffold Version ====="
-        skaffold version
-        echo "===== Cloud Run Services ====="
-        gcloud run services list --region=us-central1
-        echo "===== Cloud Deploy Targets ====="
-        gcloud deploy targets list --region=us-central1
-
-  # Create release
+  # Create release with explicit image mapping
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: gcloud
     args:
       [
-        "deploy",
-        "releases",
-        "create",
+        "deploy", "releases", "create",
         "release-${_BUILD_ID}",
         "--delivery-pipeline=flask-pipeline",
         "--region=us-central1",

@@ -5,15 +5,15 @@ metadata:
 serialPipeline:
   stages:
     - targetId: dev
-      profiles: ["dev"]  # Specify profile here
+      profiles: ["dev"]
       strategy:
         standard: {}
     - targetId: stg
-      profiles: ["stg"]  # Specify profile here
+      profiles: ["stg"]
       strategy:
         standard: {}
     - targetId: prd
-      profiles: ["prd"]  # Specify profile here
+      profiles: ["prd"]
       strategy:
         standard: {}
 ---

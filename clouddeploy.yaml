@@ -19,11 +19,8 @@ serialPipeline:
       profiles: ["prd"]
       strategy:
         standard:
-          predeploy:
-            actions:
-              - name: manual-approval
-                approvalRequired: true
           verify: false
+          approval: true
 ---
 apiVersion: deploy.cloud.google.com/v1
 kind: Target

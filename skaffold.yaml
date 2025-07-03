@@ -21,3 +21,11 @@ profiles:
   manifests:
     rawYaml:
       - cloudrun/prd.yaml
+
+customActions:
+- name: approve
+  containers:
+  - name: approve-action
+    image: gcr.io/cloud-builders/gcloud
+    command: ["echo"]
+    args: ["Approval action placeholder"]

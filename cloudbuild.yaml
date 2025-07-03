@@ -78,9 +78,9 @@ steps:
       - '--images=dev=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:${_BUILD_ID}'
       - '--images=stg=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-stg/stg:${_BUILD_ID}'
       - '--images=prd=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-prd/prd:${_BUILD_ID}'
-      - '--from-run-manifest=cloudrun-dev.yaml'
-      - '--from-run-manifest=cloudrun-stg.yaml'
-      - '--from-run-manifest=cloudrun-prd.yaml'
+      - '--from-k8s-manifest=cloudrun-dev.yaml'
+      - '--from-k8s-manifest=cloudrun-stg.yaml'
+      - '--from-k8s-manifest=cloudrun-prd.yaml'
       - '--description=automated release'
 
   # 7. Promote release to staging

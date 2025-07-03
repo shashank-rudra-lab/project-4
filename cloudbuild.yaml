@@ -11,26 +11,6 @@ steps:
     args: ['apply', '-auto-approve']
     dir: 'terraform'
 
-  # 2.5. Explicitly deploy dev and stg Cloud Run services to ensure they exist
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: gcloud
-    args:
-      - 'run'
-      - 'services'
-      - 'replace'
-      - 'cloudrun-dev.yaml'
-      - '--region=us-central1'
-      - '--project=silent-octagon-460701-a0'
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: gcloud
-    args:
-      - 'run'
-      - 'services'
-      - 'replace'
-      - 'cloudrun-stg.yaml'
-      - '--region=us-central1'
-      - '--project=silent-octagon-460701-a0'
-
   # 3. Build Docker image with tags for all environments
   - name: 'gcr.io/cloud-builders/docker'
     args:

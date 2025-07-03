@@ -90,7 +90,7 @@ steps:
       - 'deploy'
       - 'releases'
       - 'promote'
-      - 'release-${_BUILD_ID}'
+      - '--release=release-${_BUILD_ID}'
       - '--delivery-pipeline=flask-pipeline'
       - '--region=us-central1'
       - '--to-target=stg'
@@ -102,7 +102,7 @@ steps:
       - 'deploy'
       - 'releases'
       - 'promote'
-      - 'release-${_BUILD_ID}'
+      - '--release=release-${_BUILD_ID}'
       - '--delivery-pipeline=flask-pipeline'
       - '--region=us-central1'
       - '--to-target=prd'
@@ -112,5 +112,3 @@ options:
 
 substitutions:
   _BUILD_ID: $BUILD_ID
-
-#test

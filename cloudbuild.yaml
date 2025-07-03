@@ -78,31 +78,6 @@ steps:
         '--description=automated dev release'
       ]
 
-  # 7. Create staging release with staging manifest
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: gcloud
-    args:
-      [
-        'deploy', 'releases', 'create',
-        'release-stg-${_BUILD_ID}',
-        '--delivery-pipeline=flask-pipeline',
-        '--region=us-central1',
-        '--from-run-manifest=cloudrun-stg.yaml',
-        '--description=automated stg release'
-      ]
-
-  # 8. Create production release with production manifest
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: gcloud
-    args:
-      [
-        'deploy', 'releases', 'create',
-        'release-prd-${_BUILD_ID}',
-        '--delivery-pipeline=flask-pipeline',
-        '--region=us-central1',
-        '--from-run-manifest=cloudrun-prd.yaml',
-        '--description=automated prd release'
-      ]
 
 options:
   logging: CLOUD_LOGGING_ONLY

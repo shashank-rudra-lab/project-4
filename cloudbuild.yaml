@@ -77,7 +77,7 @@ steps:
         '--from-run-manifest=cloudrun-dev.yaml',
         '--description= standard promotion'
       ]
-     # Promote to stg
+  # 7.  Promote to stg
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
@@ -87,8 +87,9 @@ steps:
         '--to-target=stg',
         '--region=us-central1'
       ]
-
-    - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    
+   # 8.  Promote to Prd
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
       [

@@ -1,0 +1,26 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: python-web-flask-stg
+  namespace: default
+spec:
+  template:
+    metadata:
+      annotations:
+        run.googleapis.com/client-name: "cloud-deploy"
+        deploy.cloud.google.com/target-id: "stg"
+        deploy.cloud.google.com/delivery-pipeline: "flask-pipeline"
+        deploy.cloud.google.com/location: "us-central1"
+        run.googleapis.com/revision-suffix: "${_BUILD_ID}-stg"
+    spec:
+      containers:
+         - image: stg
+      serviceAccountName: shopshere-product-service@silent-octagon-460701-a0.iam.gserviceaccount.com
+      ports:
+        - containerPort: 8080
+      env:
+        - name: ENV
+          value: "stg"
+  traffic:
+    - latestRevision: true
+      percent: 100

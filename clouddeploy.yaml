@@ -4,15 +4,15 @@ metadata:
   name: flask-pipeline
 serialPipeline:
   stages:
-    - targetId: "projects/silent-octagon-460701-a0/locations/us-central1/targets/dev"
+    - targetId: dev
       strategy:
         standard:
           verify: false
-    - targetId: "projects/silent-octagon-460701-a0/locations/us-central1/targets/stg"
+    - targetId: stg
       strategy:
         standard:
           verify: false
-    - targetId: "projects/silent-octagon-460701-a0/locations/us-central1/targets/prd"
+    - targetId: prd
       strategy:
         standard:
           verify: false

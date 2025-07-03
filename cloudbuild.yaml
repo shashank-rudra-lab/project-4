@@ -11,22 +11,16 @@ steps:
     args: ['apply', '-auto-approve']
     dir: 'terraform'
 
-  # 3. Build Docker image with tags for all environments
+  # 3. Build Docker images for all environments
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'build'
       - '-t'
       - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:${_BUILD_ID}'
       - '-t'
-      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:latest'
-      - '-t'
       - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-stg/stg:${_BUILD_ID}'
       - '-t'
-      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-stg/stg:latest'
-      - '-t'
       - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-prd/prd:${_BUILD_ID}'
-      - '-t'
-      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-prd/prd:latest'
       - '.'
 
   # 4. Push Docker images
@@ -37,25 +31,13 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
-      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:latest'
-  - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'push'
       - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-stg/stg:${_BUILD_ID}'
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
-      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-stg/stg:latest'
-  - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'push'
       - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-prd/prd:${_BUILD_ID}'
-  - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'push'
-      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-prd/prd:latest'
-  
-  # 5. Cloud Deploy apply
+
+  # 5. Apply Cloud Deploy pipeline (you only need to run this if the pipeline changes)
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
@@ -65,47 +47,45 @@ steps:
         '--region=us-central1'
       ]
 
-  # 6. Trigger Cloud Deploy release for all stages
+  # 6. Create Cloud Deploy release
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
-      - 'deploy'
-      - 'releases'
-      - 'create'
-      - 'release-${_BUILD_ID}'
-      - '--delivery-pipeline=flask-pipeline'
-      - '--region=us-central1'
-      - '--images=dev=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:${_BUILD_ID}'
-      - '--images=stg=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-stg/stg:${_BUILD_ID}'
-      - '--images=prd=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-prd/prd:${_BUILD_ID}'
-      - '--from-run-manifest=service-dev.yaml'
-      - '--from-run-manifest=service-stg.yaml'
-      - '--from-run-manifest=service-prd.yaml'
-      - '--description=automated release'
+      [
+        'deploy', 'releases', 'create',
+        'release-${_BUILD_ID}',
+        '--delivery-pipeline=flask-pipeline',
+        '--region=us-central1',
+        '--images=dev=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:${_BUILD_ID}',
+        '--images=stg=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-stg/stg:${_BUILD_ID}',
+        '--images=prd=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-prd/prd:${_BUILD_ID}',
+        '--from-run-manifest=service-dev.yaml',
+        '--description=automated release'
+      ]
 
-  # 7. Promote release to staging
+  # 7. Promote to staging (approval required in Cloud Deploy unless verify:false)
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
-      - 'deploy'
-      - 'releases'
-      - 'promote'
-      - '--release=release-${_BUILD_ID}'
-      - '--delivery-pipeline=flask-pipeline'
-      - '--region=us-central1'
-      - '--to-target=stg'
+      [
+        'deploy', 'releases', 'promote',
+        '--release=release-${_BUILD_ID}',
+        '--delivery-pipeline=flask-pipeline',
+        '--region=us-central1',
+        '--to-target=stg'
+      ]
 
-  # 8. Promote release to production
+  # 8. Promote to production (approval required in Cloud Deploy unless verify:false)
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
-      - 'deploy'
-      - 'releases'
-      - 'promote'
-      - '--release=release-${_BUILD_ID}'
-      - '--delivery-pipeline=flask-pipeline'
-      - '--region=us-central1'
-      - '--to-target=prd'
+      [
+        'deploy', 'releases', 'promote',
+        '--release=release-${_BUILD_ID}',
+        '--delivery-pipeline=flask-pipeline',
+        '--region=us-central1',
+        '--to-target=prd'
+      ]
 
 options:
   logging: CLOUD_LOGGING_ONLY

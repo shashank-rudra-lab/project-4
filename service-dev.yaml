@@ -11,7 +11,7 @@ spec:
         deploy.cloud.google.com/target: "dev"
     spec:
       containers:
-        - image: dev
+        - image: ${IMAGE}
       serviceAccountName: shopshere-product-service@silent-octagon-460701-a0.iam.gserviceaccount.com
       ports:
         - containerPort: 8080

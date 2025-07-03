@@ -14,7 +14,7 @@ spec:
         run.googleapis.com/revision-suffix: "${CD_RELEASE_UID}"
     spec:
       containers:
-         - image: ${IMAGE}
+         - image: stg
       serviceAccountName: shopshere-product-service@silent-octagon-460701-a0.iam.gserviceaccount.com
       ports:
         - containerPort: 8080

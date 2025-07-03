@@ -9,6 +9,8 @@ spec:
       annotations:
         run.googleapis.com/client-name: "cloud-deploy"
         deploy.cloud.google.com/target: "dev"
+        deploy.cloud.google.com/delivery-pipeline: "flask-pipeline"
+        deploy.cloud.google.com/location: "us-central1"
         run.googleapis.com/revision-suffix: "${_BUILD_ID}"
     spec:
       containers:

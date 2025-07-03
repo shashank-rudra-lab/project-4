@@ -1,16 +1,15 @@
 steps:
-  # Terraform setup
+  # Terraform steps remain unchanged
   - name: "hashicorp/terraform:latest"
     entrypoint: "terraform"
     args: ["init"]
     dir: "terraform"
-    
   - name: "hashicorp/terraform:latest"
     entrypoint: "terraform"
     args: ["apply", "-auto-approve"]
     dir: "terraform"
 
-  # Build and push single image
+  # Build and push
   - name: "gcr.io/cloud-builders/docker"
     args:
       [
@@ -32,7 +31,7 @@ steps:
     entrypoint: gcloud
     args: ["deploy", "apply", "--file=clouddeploy.yaml", "--region=us-central1"]
 
-  # Create initial release
+  # Create release
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: gcloud
     args:
@@ -47,6 +46,5 @@ steps:
 
 options:
   logging: CLOUD_LOGGING_ONLY
-
 substitutions:
   _BUILD_ID: $BUILD_ID

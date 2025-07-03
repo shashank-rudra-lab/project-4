@@ -5,12 +5,15 @@ metadata:
 serialPipeline:
   stages:
     - targetId: dev
+      profiles: ["dev"]  # Specify profile here
       strategy:
         standard: {}
     - targetId: stg
+      profiles: ["stg"]  # Specify profile here
       strategy:
         standard: {}
     - targetId: prd
+      profiles: ["prd"]  # Specify profile here
       strategy:
         standard: {}
 ---
@@ -20,8 +23,6 @@ metadata:
   name: dev
 run:
   location: projects/silent-octagon-460701-a0/locations/us-central1
-skaffoldConfig:
-  skaffoldProfile: dev
 ---
 apiVersion: deploy.cloud.google.com/v1
 kind: Target
@@ -29,8 +30,6 @@ metadata:
   name: stg
 run:
   location: projects/silent-octagon-460701-a0/locations/us-central1
-skaffoldConfig:
-  skaffoldProfile: stg
 ---
 apiVersion: deploy.cloud.google.com/v1
 kind: Target
@@ -38,5 +37,3 @@ metadata:
   name: prd
 run:
   location: projects/silent-octagon-460701-a0/locations/us-central1
-skaffoldConfig:
-  skaffoldProfile: prd

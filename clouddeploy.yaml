@@ -20,7 +20,7 @@ serialPipeline:
       strategy:
         standard:
           verify: false
-          approval: true
+      approval: {}
 ---
 apiVersion: deploy.cloud.google.com/v1
 kind: Target

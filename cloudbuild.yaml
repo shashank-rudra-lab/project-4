@@ -10,13 +10,13 @@ steps:
     args: ["apply", "-auto-approve"]
     dir: "terraform"
 
-  # Build and push single image
+  # Build and push image with latest tag
   - name: "gcr.io/cloud-builders/docker"
     args:
       [
         "build",
         "-t",
-        "us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:${_BUILD_ID}",
+        "us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:latest",
         "."
       ]
 
@@ -24,7 +24,7 @@ steps:
     args:
       [
         "push",
-        "us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:${_BUILD_ID}",
+        "us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:latest",
       ]
 
   # Apply Cloud Deploy pipeline
@@ -32,20 +32,18 @@ steps:
     entrypoint: gcloud
     args: ["deploy", "apply", "--file=clouddeploy.yaml", "--region=us-central1"]
 
-  # Create release with explicit image mapping
+  # Create release
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: gcloud
     args:
       [
         "deploy", "releases", "create",
-        "release-${_BUILD_ID}",
+        "release-$BUILD_ID",
         "--delivery-pipeline=flask-pipeline",
         "--region=us-central1",
-        "--images=IMAGE=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:${_BUILD_ID}",
-        "--skaffold-file=skaffold.yaml",
+        "--source=.",
+        "--skaffold-file=skaffold.yaml"
       ]
 
 options:
   logging: CLOUD_LOGGING_ONLY
-substitutions:
-  _BUILD_ID: $BUILD_ID

@@ -8,7 +8,7 @@ spec:
     metadata:
       annotations:
         run.googleapis.com/client-name: "cloud-deploy"
-        deploy.cloud.google.com/target: "stg"
+        deploy.cloud.google.com/target-id: "stg"
         run.googleapis.com/revision-suffix: "${_BUILD_ID}"
     spec:
       containers:

@@ -75,6 +75,7 @@ steps:
       - 'release-${_BUILD_ID}'
       - '--delivery-pipeline=flask-pipeline'
       - '--region=us-central1'
+      - '--to-target=dev'
       - '--images=dev=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:${_BUILD_ID},stg=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-stg/stg:${_BUILD_ID},prd=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-prd/prd:${_BUILD_ID}'
       - '--from-run-manifest=service-dev.yaml'
       - '--from-run-manifest=service-stg.yaml'

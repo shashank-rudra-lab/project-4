@@ -11,9 +11,10 @@ spec:
         deploy.cloud.google.com/target-id: "prd"
         deploy.cloud.google.com/delivery-pipeline: "flask-pipeline"
         deploy.cloud.google.com/location: "us-central1"
+        run.googleapis.com/revision-suffix: "$BUILD_ID-prd"
     spec:
       containers:
-         - image: us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-prd/prd:latest
+         - image: prd
       serviceAccountName: shopshere-product-service@silent-octagon-460701-a0.iam.gserviceaccount.com
       ports:
         - containerPort: 8080

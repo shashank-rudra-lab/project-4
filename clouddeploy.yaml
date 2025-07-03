@@ -2,60 +2,42 @@ apiVersion: deploy.cloud.google.com/v1
 kind: DeliveryPipeline
 metadata:
   name: flask-pipeline
-description: Python Flask multi-stage deployment pipeline using Cloud Run
+description: Standard promotion using a single Cloud Run service
 serialPipeline:
   stages:
     - targetId: dev
+      profiles: ["dev"]
       strategy:
-        standard:
-          verify: false
-          predeploy:
-            actions: []
-          postdeploy:
-            actions: []
+        standard: {}
     - targetId: stg
+      profiles: ["stg"]
       strategy:
-        standard:
-          verify: false
-          predeploy:
-            actions: []
-          postdeploy:
-            actions: []
+        standard: {}
     - targetId: prd
+      profiles: ["prd"]
       strategy:
-        standard:
-          verify: false
-          predeploy:
-            actions: []
-          postdeploy:
-            actions: []
-
+        standard: {}
 ---
-
 apiVersion: deploy.cloud.google.com/v1
 kind: Target
 metadata:
   name: dev
-description: Dev environment in Cloud Run
+description: dev environment
 run:
   location: projects/silent-octagon-460701-a0/locations/us-central1
-
 ---
-
 apiVersion: deploy.cloud.google.com/v1
 kind: Target
 metadata:
   name: stg
-description: Staging environment in Cloud Run
+description: stg environment
 run:
   location: projects/silent-octagon-460701-a0/locations/us-central1
-
 ---
-
 apiVersion: deploy.cloud.google.com/v1
 kind: Target
 metadata:
   name: prd
-description: Production environment in Cloud Run
+description: prd environment
 run:
   location: projects/silent-octagon-460701-a0/locations/us-central1

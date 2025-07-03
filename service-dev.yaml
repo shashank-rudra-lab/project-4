@@ -9,9 +9,10 @@ spec:
       annotations:
         run.googleapis.com/client-name: "cloud-deploy"
         deploy.cloud.google.com/target: "dev"
+        run.googleapis.com/revision-suffix: "${_BUILD_ID}"
     spec:
       containers:
-        - image: ${IMAGE}
+        - image: dev
       serviceAccountName: shopshere-product-service@silent-octagon-460701-a0.iam.gserviceaccount.com
       ports:
         - containerPort: 8080

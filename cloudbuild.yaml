@@ -1,122 +1,48 @@
 steps:
-  # 1. Terraform Init
+  # Terraform setup
   - name: "hashicorp/terraform:latest"
     entrypoint: "terraform"
     args: ["init"]
     dir: "terraform"
-
-  # 2. Terraform Apply
+    
   - name: "hashicorp/terraform:latest"
     entrypoint: "terraform"
     args: ["apply", "-auto-approve"]
     dir: "terraform"
 
-  # 3. Build Docker image with tags for all environments
+  # Build and push single image
   - name: "gcr.io/cloud-builders/docker"
     args:
       [
         "build",
         "-t",
         "us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:${_BUILD_ID}",
-        "-t",
-        "us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:latest",
-        "-t",
-        "us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-stg/stg:${_BUILD_ID}",
-        "-t",
-        "us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-stg/stg:latest",
-        "-t",
-        "us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-prd/prd:${_BUILD_ID}",
-        "-t",
-        "us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-prd/prd:latest",
-        ".",
+        "."
       ]
 
-  # 4. Push Docker images
   - name: "gcr.io/cloud-builders/docker"
     args:
       [
         "push",
         "us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:${_BUILD_ID}",
       ]
-  - name: "gcr.io/cloud-builders/docker"
-    args:
-      [
-        "push",
-        "us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:latest",
-      ]
-  - name: "gcr.io/cloud-builders/docker"
-    args:
-      [
-        "push",
-        "us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-stg/stg:${_BUILD_ID}",
-      ]
-  - name: "gcr.io/cloud-builders/docker"
-    args:
-      [
-        "push",
-        "us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-stg/stg:latest",
-      ]
-  - name: "gcr.io/cloud-builders/docker"
-    args:
-      [
-        "push",
-        "us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-prd/prd:${_BUILD_ID}",
-      ]
-  - name: "gcr.io/cloud-builders/docker"
-    args:
-      [
-        "push",
-        "us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-prd/prd:latest",
-      ]
 
-  # 5. Cloud Deploy apply
+  # Apply Cloud Deploy pipeline
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: gcloud
     args: ["deploy", "apply", "--file=clouddeploy.yaml", "--region=us-central1"]
 
-  # 6. Create dev release with dev manifest
+  # Create initial release
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: gcloud
     args:
       [
-        "deploy",
-        "releases",
-        "create",
-        "release-dev-${_BUILD_ID}",
+        "deploy", "releases", "create",
+        "release-${_BUILD_ID}",
         "--delivery-pipeline=flask-pipeline",
         "--region=us-central1",
-        "--from-run-manifest=cloudrun-dev.yaml",
-        "--description=standard promotion",
-      ]
-
-  # 7. Promote to stg
-  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
-    entrypoint: gcloud
-    args:
-      [
-        "deploy",
-        "releases",
-        "promote",
-        "--release=release-dev-${_BUILD_ID}",
-        "--to-target=stg",
-        "--region=us-central1",
-        "--delivery-pipeline=flask-pipeline",
-        "--from-run-manifest=cloudrun-stg.yaml",
-      ]
-
-  # 8. Promote to prd
-  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
-    entrypoint: gcloud
-    args:
-      [
-        "deploy",
-        "releases",
-        "promote",
-        "--release=release-dev-${_BUILD_ID}",
-        "--to-target=prd",
-        "--region=us-central1",
-        "--delivery-pipeline=flask-pipeline",
-        "--from-run-manifest=cloudrun-prd.yaml",
+        "--images=IMAGE=us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:${_BUILD_ID}",
+        "--skaffold-file=skaffold.yaml"
       ]
 
 options:

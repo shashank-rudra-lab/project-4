@@ -20,6 +20,8 @@ metadata:
   name: dev
 run:
   location: projects/silent-octagon-460701-a0/locations/us-central1
+skaffoldConfig:
+  skaffoldProfile: dev
 ---
 apiVersion: deploy.cloud.google.com/v1
 kind: Target
@@ -27,6 +29,8 @@ metadata:
   name: stg
 run:
   location: projects/silent-octagon-460701-a0/locations/us-central1
+skaffoldConfig:
+  skaffoldProfile: stg
 ---
 apiVersion: deploy.cloud.google.com/v1
 kind: Target
@@ -34,3 +38,5 @@ metadata:
   name: prd
 run:
   location: projects/silent-octagon-460701-a0/locations/us-central1
+skaffoldConfig:
+  skaffoldProfile: prd

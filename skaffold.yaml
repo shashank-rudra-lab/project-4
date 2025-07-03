@@ -1,26 +1,17 @@
-apiVersion: skaffold/v4beta6
+apiVersion: skaffold/v4beta9
 kind: Config
-metadata:
-  name: python-web-flask
-deploy:
-  cloudrun:
-    serviceName: python-web-flask
 profiles:
-  - name: dev
-    deploy:
-      cloudrun:
-        env:
-          - name: ENV
-            value: "dev"
-  - name: stg
-    deploy:
-      cloudrun:
-        env:
-          - name: ENV
-            value: "stg"
-  - name: prd
-    deploy:
-      cloudrun:
-        env:
-          - name: ENV
-            value: "prd"
+- name: dev
+  manifests:
+    rawYaml:
+      - cloudrun/dev.yaml
+      
+- name: stg
+  manifests:
+    rawYaml:
+      - cloudrun/stg.yaml
+      
+- name: prd
+  manifests:
+    rawYaml:
+      - cloudrun/prd.yaml

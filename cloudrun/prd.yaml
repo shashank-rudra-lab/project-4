@@ -1,0 +1,24 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: python-web-flask-prd
+  namespace: default
+  annotations:
+    run.googleapis.com/client-name: "prd-deploy"
+spec:
+  template:
+    metadata:
+      annotations:
+        run.googleapis.com/revision-suffix: "${CD_RELEASE_UID}-prd"
+    spec:
+      containers:
+        - image: "us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:${CD_IMAGE_TAG}"
+          env:
+            - name: ENV
+              value: "prd"
+      serviceAccountName: shopshere-product-service@silent-octagon-460701-a0.iam.gserviceaccount.com
+      ports:
+        - containerPort: 8080
+  traffic:
+    - latestRevision: true
+      percent: 100

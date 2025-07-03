@@ -1,21 +1,21 @@
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
-  name: python-web-flask-${CD_TARGET_ID}
+  name: python-web-flask-stg
   namespace: default
+  annotations:
+    run.googleapis.com/client-name: "stg-deploy"
 spec:
   template:
     metadata:
       annotations:
-        run.googleapis.com/client-name: "cloud-deploy"
-        deploy.cloud.google.com/delivery-pipeline: "flask-pipeline"
-        deploy.cloud.google.com/location: "us-central1"
+        run.googleapis.com/revision-suffix: "${CD_RELEASE_UID}-stg"
     spec:
       containers:
-        - image: us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:latest
+        - image: "us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:${CD_IMAGE_TAG}"
           env:
             - name: ENV
-              value: "${CD_TARGET_ID}"
+              value: "stg"
       serviceAccountName: shopshere-product-service@silent-octagon-460701-a0.iam.gserviceaccount.com
       ports:
         - containerPort: 8080

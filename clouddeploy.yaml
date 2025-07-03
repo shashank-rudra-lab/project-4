@@ -2,42 +2,41 @@ apiVersion: deploy.cloud.google.com/v1
 kind: DeliveryPipeline
 metadata:
   name: flask-pipeline
-description: Standard promotion using a single Cloud Run service
 serialPipeline:
   stages:
     - targetId: dev
-      profiles: ["dev"]
       strategy:
-        standard: {}
+        standard:
+          verify: false
     - targetId: stg
-      profiles: ["stg"]
       strategy:
-        standard: {}
+        standard:
+          verify: false
     - targetId: prd
-      profiles: ["prd"]
       strategy:
-        standard: {}
+        standard:
+          verify: false
 ---
 apiVersion: deploy.cloud.google.com/v1
 kind: Target
 metadata:
   name: dev
-description: dev environment
 run:
-  location: projects/silent-octagon-460701-a0/locations/us-central1
+  location: projects/YOUR_PROJECT_ID/locations/us-central1
+  service: python-web-flask-dev
 ---
 apiVersion: deploy.cloud.google.com/v1
 kind: Target
 metadata:
   name: stg
-description: stg environment
 run:
-  location: projects/silent-octagon-460701-a0/locations/us-central1
+  location: projects/YOUR_PROJECT_ID/locations/us-central1
+  service: python-web-flask-stg
 ---
 apiVersion: deploy.cloud.google.com/v1
 kind: Target
 metadata:
   name: prd
-description: prd environment
 run:
-  location: projects/silent-octagon-460701-a0/locations/us-central1
+  location: projects/YOUR_PROJECT_ID/locations/us-central1
+  service: python-web-flask-prd

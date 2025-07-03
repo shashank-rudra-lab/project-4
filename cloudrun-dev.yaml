@@ -11,7 +11,7 @@ spec:
         deploy.cloud.google.com/target-id: "dev"
         deploy.cloud.google.com/delivery-pipeline: "flask-pipeline"
         deploy.cloud.google.com/location: "us-central1"
-        run.googleapis.com/revision-suffix: "${CD_RELEASE_UID}"
+        
     spec:
       containers:
          - image: us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:latest

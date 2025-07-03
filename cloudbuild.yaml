@@ -74,8 +74,28 @@ steps:
         'release-dev-${_BUILD_ID}',
         '--delivery-pipeline=flask-pipeline',
         '--region=us-central1',
-        '--from-run-manifest=cloudrun.yaml',
+        '--from-run-manifest=cloudrun-dev.yaml',
         '--description= standard promotion'
+      ]
+     # Promote to stg
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      [
+        'deploy', 'releases', 'promote',
+        '--release=release-dev-${_BUILD_ID}',
+        '--to-target=stg',
+        '--region=us-central1'
+      ]
+
+    - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      [
+        'deploy', 'releases', 'promote',
+        '--release=release-dev-${_BUILD_ID}',
+        '--to-target=prd',
+        '--region=us-central1'
       ]
 
 

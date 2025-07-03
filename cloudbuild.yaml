@@ -32,7 +32,7 @@ steps:
     entrypoint: gcloud
     args: ["deploy", "apply", "--file=clouddeploy.yaml", "--region=us-central1"]
 
-  # Create release
+  # Create release - this will auto-deploy to dev and staging
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: gcloud
     args:

@@ -2,25 +2,30 @@ apiVersion: deploy.cloud.google.com/v1
 kind: DeliveryPipeline
 metadata:
   name: flask-pipeline
+description: "Auto-deploy to dev/staging with production approval"
 serialPipeline:
   stages:
     - targetId: dev
       profiles: ["dev"]
       strategy:
-        standard: {}
+        standard:
+          verify: true  # Enable automatic deployment to dev
     - targetId: stg
       profiles: ["stg"]
       strategy:
-        standard: {}
+        standard:
+          verify: true  # Enable automatic deployment to staging
     - targetId: prd
       profiles: ["prd"]
       strategy:
-        standard: {}
+        standard:
+          requireApproval: true  # Manual approval for production
 ---
 apiVersion: deploy.cloud.google.com/v1
 kind: Target
 metadata:
   name: dev
+description: "Development environment"
 run:
   location: projects/silent-octagon-460701-a0/locations/us-central1
 ---
@@ -28,6 +33,7 @@ apiVersion: deploy.cloud.google.com/v1
 kind: Target
 metadata:
   name: stg
+description: "Staging environment"
 run:
   location: projects/silent-octagon-460701-a0/locations/us-central1
 ---
@@ -35,5 +41,6 @@ apiVersion: deploy.cloud.google.com/v1
 kind: Target
 metadata:
   name: prd
+description: "Production environment"
 run:
   location: projects/silent-octagon-460701-a0/locations/us-central1

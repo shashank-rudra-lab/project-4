@@ -10,7 +10,7 @@ spec:
         run.googleapis.com/client-name: "cloud-deploy"
         deploy.cloud.google.com/delivery-pipeline: "flask-pipeline"
         deploy.cloud.google.com/location: "us-central1"
-        run.googleapis.com/revision-suffix: "${CD_RELEASE_UID}-${CD_TARGET_ID}"
+        run.googleapis.com/revision-suffix: "${CD_RELEASE_UID}-${CD_ROLLOUT_ID}"
     spec:
       containers:
         - image: us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:latest

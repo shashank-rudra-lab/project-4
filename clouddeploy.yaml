@@ -8,15 +8,22 @@ serialPipeline:
     - targetId: dev
       profiles: ["dev"]
       strategy:
-        standard: {}
+        standard:
+          verify: false
     - targetId: stg
       profiles: ["stg"]
       strategy:
-        standard: {}
+        standard:
+          verify: false
     - targetId: prd
       profiles: ["prd"]
       strategy:
-         standard: {}
+        standard:
+          predeploy:
+            actions:
+              - name: manual-approval
+                approvalRequired: true
+          verify: false
 ---
 apiVersion: deploy.cloud.google.com/v1
 kind: Target

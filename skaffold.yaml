@@ -25,21 +25,21 @@ profiles:
 customActions:
 - name: approve
   containers:
-  - name: approve-action
+  - name: approve-container  # Unique name
     image: gcr.io/cloud-builders/gcloud
     command: ["echo"]
-    args: ["Approval action placeholder"]
+    args: ["Approval placeholder"]
 
 - name: promote-to-stg
   containers:
-  - name: promote-action
+  - name: promote-stg-container  # Unique name
     image: gcr.io/cloud-builders/gcloud
     command: ["echo"]
     args: ["Auto-promoting to staging"]
 
 - name: promote-to-prd
   containers:
-  - name: promote-action
+  - name: promote-prd-container  # Unique name
     image: gcr.io/cloud-builders/gcloud
     command: ["echo"]
     args: ["Auto-promoting to production"]

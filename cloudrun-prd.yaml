@@ -13,14 +13,14 @@ spec:
         deploy.cloud.google.com/location: "us-central1"
         run.googleapis.com/revision-suffix: "${CD_RELEASE_UID}"
     spec:
-      containers:
-         - image: prd
       serviceAccountName: shopshere-product-service@silent-octagon-460701-a0.iam.gserviceaccount.com
-      ports:
-        - containerPort: 8080
-      env:
-        - name: ENV
-          value: "prd"
+      containers:
+        - image: prd
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ENV
+              value: "prd"
   traffic:
     - latestRevision: true
       percent: 100

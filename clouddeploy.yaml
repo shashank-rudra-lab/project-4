@@ -6,16 +6,13 @@ serialPipeline:
   stages:
     - targetId: dev
       strategy:
-        standard:
-          verify: false
+        standard: {}
     - targetId: stg
       strategy:
-        standard:
-          verify: false
+        standard: {}
     - targetId: prd
       strategy:
-        standard:
-          verify: false
+        standard: {}
 ---
 apiVersion: deploy.cloud.google.com/v1
 kind: Target
@@ -23,7 +20,6 @@ metadata:
   name: dev
 run:
   location: projects/YOUR_PROJECT_ID/locations/us-central1
-  service: python-web-flask-dev
 ---
 apiVersion: deploy.cloud.google.com/v1
 kind: Target
@@ -31,7 +27,6 @@ metadata:
   name: stg
 run:
   location: projects/YOUR_PROJECT_ID/locations/us-central1
-  service: python-web-flask-stg
 ---
 apiVersion: deploy.cloud.google.com/v1
 kind: Target
@@ -39,4 +34,3 @@ metadata:
   name: prd
 run:
   location: projects/YOUR_PROJECT_ID/locations/us-central1
-  service: python-web-flask-prd

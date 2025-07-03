@@ -85,7 +85,9 @@ steps:
         'deploy', 'releases', 'promote',
         '--release=release-dev-${_BUILD_ID}',
         '--to-target=stg',
-        '--region=us-central1'
+        '--region=us-central1',
+        '--delivery-pipeline=flask-pipeline',
+        '--from-run-manifest=cloudrun-stg.yaml'
       ]
     
    # 8.  Promote to Prd
@@ -96,7 +98,9 @@ steps:
         'deploy', 'releases', 'promote',
         '--release=release-dev-${_BUILD_ID}',
         '--to-target=prd',
-        '--region=us-central1'
+        '--region=us-central1',
+        '--delivery-pipeline=flask-pipeline',
+        '--from-run-manifest=cloudrun-prd.yaml
       ]
 
 

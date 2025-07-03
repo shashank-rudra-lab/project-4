@@ -14,46 +14,30 @@ steps:
   # 3. Build Docker image with tags for all environments
   - name: 'gcr.io/cloud-builders/docker'
     args:
-      - 'build'
-      - '-t'
-      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:${_BUILD_ID}'
-      - '-t'
-      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:latest'
-      - '-t'
-      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-stg/stg:${_BUILD_ID}'
-      - '-t'
-      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-stg/stg:latest'
-      - '-t'
-      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-prd/prd:${_BUILD_ID}'
-      - '-t'
-      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-prd/prd:latest'
-      - '.'
+      [
+        'build',
+        '-t', 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:${_BUILD_ID}',
+        '-t', 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:latest',
+        '-t', 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-stg/stg:${_BUILD_ID}',
+        '-t', 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-stg/stg:latest',
+        '-t', 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-prd/prd:${_BUILD_ID}',
+        '-t', 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-prd/prd:latest',
+        '.'
+      ]
 
   # 4. Push Docker images
   - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'push'
-      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:${_BUILD_ID}'
+    args: ['push', 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:${_BUILD_ID}']
   - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'push'
-      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:latest'
+    args: ['push', 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-dev/dev:latest']
   - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'push'
-      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-stg/stg:${_BUILD_ID}'
+    args: ['push', 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-stg/stg:${_BUILD_ID}']
   - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'push'
-      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-stg/stg:latest'
+    args: ['push', 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-stg/stg:latest']
   - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'push'
-      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-prd/prd:${_BUILD_ID}'
+    args: ['push', 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-prd/prd:${_BUILD_ID}']
   - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'push'
-      - 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-prd/prd:latest'
+    args: ['push', 'us-central1-docker.pkg.dev/silent-octagon-460701-a0/project4-prd/prd:latest']
 
   # 5. Cloud Deploy apply
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -65,7 +49,7 @@ steps:
         '--region=us-central1'
       ]
 
- # 6. Create dev release with dev manifest
+  # 6. Create dev release with dev manifest
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
@@ -75,9 +59,10 @@ steps:
         '--delivery-pipeline=flask-pipeline',
         '--region=us-central1',
         '--from-run-manifest=cloudrun-dev.yaml',
-        '--description= standard promotion'
+        '--description=standard promotion'
       ]
-  # 7.  Promote to stg
+
+  # 7. Promote to stg
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
@@ -89,8 +74,8 @@ steps:
         '--delivery-pipeline=flask-pipeline',
         '--from-run-manifest=cloudrun-stg.yaml'
       ]
-    
-   # 8.  Promote to Prd
+
+  # 8. Promote to prd
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
@@ -100,13 +85,8 @@ steps:
         '--to-target=prd',
         '--region=us-central1',
         '--delivery-pipeline=flask-pipeline',
-        '--from-run-manifest=cloudrun-prd.yaml
+        '--from-run-manifest=cloudrun-prd.yaml'
       ]
-
-
-
-    
- 
 
 options:
   logging: CLOUD_LOGGING_ONLY

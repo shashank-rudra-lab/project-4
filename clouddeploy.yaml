@@ -2,31 +2,30 @@ apiVersion: deploy.cloud.google.com/v1
 kind: DeliveryPipeline
 metadata:
   name: flask-pipeline
-description: "Auto-deploy to dev/staging with production approval"
+description: "Cloud Run deployment pipeline with production approval"
 serialPipeline:
   stages:
     - targetId: dev
       profiles: ["dev"]
       strategy:
-        standard:
-          verify: false
+        standard: {}
     - targetId: stg
       profiles: ["stg"]
       strategy:
-        standard:
-          verify: false
+        standard: {}
     - targetId: prd
       profiles: ["prd"]
       strategy:
         standard:
-          verify: false
-      approval: {}
+          # Correct approval configuration for Cloud Run
+          postdeploy:
+            actions: ["approve"]  # This creates the approval gate
 ---
 apiVersion: deploy.cloud.google.com/v1
 kind: Target
 metadata:
   name: dev
-description: "Development environment"
+description: "Development Cloud Run service"
 run:
   location: projects/silent-octagon-460701-a0/locations/us-central1
 ---
@@ -34,7 +33,7 @@ apiVersion: deploy.cloud.google.com/v1
 kind: Target
 metadata:
   name: stg
-description: "Staging environment"
+description: "Staging Cloud Run service"
 run:
   location: projects/silent-octagon-460701-a0/locations/us-central1
 ---
@@ -42,6 +41,6 @@ apiVersion: deploy.cloud.google.com/v1
 kind: Target
 metadata:
   name: prd
-description: "Production environment"
+description: "Production Cloud Run service"
 run:
   location: projects/silent-octagon-460701-a0/locations/us-central1

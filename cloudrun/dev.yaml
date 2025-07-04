@@ -5,6 +5,7 @@ metadata:
   namespace: default
   annotations:
     run.googleapis.com/client-name: "dev-deploy"
+    run.googleapis.com/ingress: "all"
 spec:
   template:
     metadata:
